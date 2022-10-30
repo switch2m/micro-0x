@@ -1,0 +1,5 @@
+.gitlab/
+.gitlab-ci.yml
+CIS_KUBECONFIG
+*-deployement.yml
+devops1915-*.json
