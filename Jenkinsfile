@@ -1,12 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('npm install') {
+        stage('this is  test stage') {
             steps {
-                echo 'test'
-                sh 'pwd'
-                sh 'cd ..'
-                sh 'pwd'
+                echo 'test the first mvn package'
+                sh 'cd microservice-commandes mvn clean package'
             }
         }
     }
