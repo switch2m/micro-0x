@@ -5,6 +5,7 @@ pipeline {
             steps {
                 echo 'test the first mvn package'
                 sh '''
+                    kubectl version
                     terraform version
                     /opt/apache-maven-3.6.3/bin mvn version
                     cd microservice-commandes
