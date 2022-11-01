@@ -1,0 +1,105 @@
+---
+- name: Install python3
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+    - name: Instal docker compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{lookup('pipe', 'uname -s')}}-{{lookup('pipe', 'uname -m')}}
+        dest: /usr/local/bin/docker-compose
+        mode: +x
+    - name: check docker version
+      command: "{{ item }}"
+      with_items:
+        - docker version
+        - docker-compose version
+      register: output
+    - debug: msg={{output}}
+    - name: start docker
+      systemd:
+        name: docker
+        state: started
+      register: dockout
+    - debug: msg={{dockout}}
+
+- name: Install terraform
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install unzip
+      community.general.snap:
+        name: terraform
+    - name: check terraform version
+      command:
+        cmd: terraform version
+      register: terout
+    - debug: msg={{terout}}
+
+- name: add new user
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: create a new user to run dokcer command
+      user:
+        name: new-user
+        groups: docker
+        append: yes
+    - name: reconnect to the session
+      meta: reset_connection
+
+
+- name: Test docker pull
+  hosts: localhost
+  become: yes
+  become_user: new-user
+  tasks:
+    - name: docker ps
+      command:
+        cmd: docker ps
+    - name: docker images
+      command:
+        cmd: docker images
+      register: dockimg
+    - debug: msg={{dockimg}}
+
+- name: install jenkins as docker container
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: run jenkins in docker
+      command:
+        cmd: docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker jenkins/jenkins:lts
+      register: dockjen
+    - debug: msg={{dockjen}}
