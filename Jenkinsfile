@@ -10,7 +10,7 @@ pipeline {
                     mvn -version
                     cd microservice-commandes
                     mvn clean package
-                    kubectl version
+                    kubectl version --output=yaml
                     
                 '''
             }
