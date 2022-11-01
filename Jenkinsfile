@@ -6,7 +6,7 @@ pipeline {
                 echo 'test the first mvn package'
                 sh '''
                     cd microservice-commandes
-                    ${mvnHome}/bin/mvn clean package
+                    /opt/apache-maven-3.6.3/bin clean package
                     terraform version
                 '''
             }
