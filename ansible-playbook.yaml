@@ -58,7 +58,7 @@
   hosts: localhost
   become: yes
   tasks:
-    - name: Install unzip
+    - name: Install terraform
       community.general.snap:
         name: terraform
     - name: check terraform version
