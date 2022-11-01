@@ -6,7 +6,8 @@ pipeline {
                 echo 'test the first mvn package'
                 sh '''
                     cd microservice-commandes 
-                    mvn clean package
+                    sudo mvn clean package
+                    sudo terraform version
                 '''
             }
         }
