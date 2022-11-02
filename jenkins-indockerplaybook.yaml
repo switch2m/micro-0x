@@ -1,5 +1,7 @@
 ---
 #if we are running jenkins in docker container we should install the needed tool for deployment
+#for java and maven instalation its better to use apt package manager instead of what we used in this file
+#cuz its gonna be installed in a location where jenkins does not have permissions to access
 - name: Install java and maeven
   hosts: localhost
   become: yes
