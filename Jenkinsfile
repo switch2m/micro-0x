@@ -35,5 +35,20 @@ pipeline {
                 '''
             }
         }
+        stage('buid and push docker images') {
+            steps {
+                echo 'build and push docker images'
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh '''
+                        cd microservice-produits
+                        docker build -t switch2mdock/micro-app:${BUILD_NUMBER} .
+                        echo $PASS | docker login -u $USER --password-stdin
+                        docker push beamtel/web:${BUILD_NUMBER}
+                    
+                    '''
+                }
+                
+            }
+        }
     }
 }
