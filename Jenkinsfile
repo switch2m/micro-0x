@@ -8,6 +8,7 @@ pipeline {
                     terraform version
                     mvn -version
                     kubectl version --client
+                    az --version
                 '''
             }
         }
@@ -64,7 +65,22 @@ pipeline {
                         docker push switch2mdock/micro-app:cilent.${BUILD_NUMBER}
                     '''
                 }
-                
+            }
+        }
+        stage('Create AKS kubenetes cluster') {
+            steps {
+                echo 'creating AKS'
+                sh 'terraform apply --auto-approve'
+                echo 'connecting to the cluster'
+                sh 'az account set --subscription 7fd37297-df8e-43f0-8679-865285ff7951'
+                sh 'az aks get-credentials --resource-group rg-aks --name stage-aks-cluster'
+            }
+        }
+        stage('deployment with kubernetes') {
+            steps {
+                echo 'testing kubernetes cluster connection'
+                sh 'kubectl get node'
+                echo 'running kubectl commands'
             }
         }
     }

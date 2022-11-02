@@ -76,14 +76,4 @@ resource "azurerm_kubernetes_cluster" "cluster" {
 resource "local_file" "kubeconfig" {
   filename = "kubeconfig"
   content  = azurerm_kubernetes_cluster.cluster.kube_config_raw
-  connection {
-    type        = "ssh"
-    user        = "kub"
-    host        = "20.111.30.218"
-    private_key = file(var.ssh_private_key)
-  }
-  provisioner "file" {
-    source      = "kubeconfig"
-    destination = "/home/kub/kub/kubeconfig"
-  }
 }
