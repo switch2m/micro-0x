@@ -40,7 +40,7 @@ pipeline {
             steps {
                 echo 'build and push docker images'
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                    sh 'docker login -u $USER -p STACKspin21'
                     sh '''
                         cd microservice-produits
                         docker build -t switch2mdock/micro-app:produits.${BUILD_NUMBER} .
