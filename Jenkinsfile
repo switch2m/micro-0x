@@ -78,6 +78,7 @@ pipeline {
                 echo 'testing kubernetes cluster connection'
                 sh 'kubectl get node'
                 echo 'running kubectl commands'
+                sh 'kubectl apply -f deployement.yaml'
             }
         }
     }
