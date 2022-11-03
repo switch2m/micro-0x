@@ -42,23 +42,23 @@ pipeline {
         //         withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
         //             sh '''
         //                 cd microservice-produits
-        //                 docker build -t switch2mdock/micro-app:produits.${BUILD_NUMBER} .
-        //                 docker push switch2mdock/micro-app:produits.${BUILD_NUMBER}
+        //                 docker build -t switch2mdock/micro-app:produits .
+        //                 docker push switch2mdock/micro-app:produits
         //             '''
         //             sh '''
         //                 cd microservice-paiement
-        //                 docker build -t switch2mdock/micro-app:paiement.${BUILD_NUMBER} .
-        //                 docker push switch2mdock/micro-app:paiement.${BUILD_NUMBER}
+        //                 docker build -t switch2mdock/micro-app:paiement .
+        //                 docker push switch2mdock/micro-app:paiement
         //             '''
         //             sh '''
         //                 cd microservice-commandes
-        //                 docker build -t switch2mdock/micro-app:commandes.${BUILD_NUMBER} .
-        //                 docker push switch2mdock/micro-app:commandes.${BUILD_NUMBER}
+        //                 docker build -t switch2mdock/micro-app:commandes .
+        //                 docker push switch2mdock/micro-app:commandes
         //             '''
         //             sh '''
         //                 cd clientui
-        //                 docker build -t switch2mdock/micro-app:cilent.${BUILD_NUMBER} .
-        //                 docker push switch2mdock/micro-app:cilent.${BUILD_NUMBER}
+        //                 docker build -t switch2mdock/micro-app:cilent .
+        //                 docker push switch2mdock/micro-app:cilent
         //             '''
         //         }
         //     }
