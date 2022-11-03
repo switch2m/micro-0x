@@ -40,28 +40,25 @@ pipeline {
             steps {
                 echo 'build and push docker images'
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin"
                     sh '''
                         cd microservice-produits
                         docker build -t switch2mdock/micro-app:produits.${BUILD_NUMBER} .
-                        echo $PASS | docker login -u $USER --password-stdin
                         docker push switch2mdock/micro-app:produits.${BUILD_NUMBER}
                     '''
                     sh '''
                         cd microservice-paiement
                         docker build -t switch2mdock/micro-app:paiement.${BUILD_NUMBER} .
-                        echo $PASS | docker login -u $USER --password-stdin
                         docker push switch2mdock/micro-app:paiement.${BUILD_NUMBER}
                     '''
                     sh '''
                         cd microservice-commandes
                         docker build -t switch2mdock/micro-app:commandes.${BUILD_NUMBER} .
-                        echo $PASS | docker login -u $USER --password-stdin
                         docker push switch2mdock/micro-app:commandes.${BUILD_NUMBER}
                     '''
                     sh '''
                         cd clientui
                         docker build -t switch2mdock/micro-app:cilent.${BUILD_NUMBER} .
-                        echo $PASS | docker login -u $USER --password-stdin
                         docker push switch2mdock/micro-app:cilent.${BUILD_NUMBER}
                     '''
                 }
