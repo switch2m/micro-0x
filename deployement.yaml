@@ -115,7 +115,7 @@ spec:
     port: 80
     name: http
     targetPort: 8080
-
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -139,7 +139,7 @@ spec:
         image: switch2mdock/micro-app:paiement
         ports:
         - containerPort: 9003
-        
+
 ---
 apiVersion: v1
 kind: Service
