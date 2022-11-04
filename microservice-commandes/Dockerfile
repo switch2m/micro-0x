@@ -9,4 +9,4 @@ ADD /target/mcommandes-0.0.1-SNAPSHOT.jar app.jar
 RUN pwd
 RUN ls
 EXPOSE 9002 9002
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]

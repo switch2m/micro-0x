@@ -7,4 +7,5 @@ RUN chown -R javauser:javauser /app
 USER javauser
 ADD /target/mproduits-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9001 9001
+RUN ls
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
