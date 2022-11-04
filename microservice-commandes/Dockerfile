@@ -1,6 +1,5 @@
 FROM fabric8/java-alpine-openjdk8-jre
 VOLUME /app
-WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 RUN addgroup --system javauser && adduser -S -s /bin/false -G javauser javauser
