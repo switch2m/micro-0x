@@ -2,6 +2,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: clientui
+  namespace: default 
+  annotations:
+           prometheus.io/scrape: 'true'
+           filter.by.port.name: 'true'
+spec:
+  selector:
+    matchLabels:
+      app: clientui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: clientui
+    spec:
+      containers:
+      - name: clientui
+        image: switch2mdock/micro-app:cilent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clientui
+spec:
+  type: LoadBalancer
+  selector:
+    app: clientui
+  ports:
+  - protocol: TCP
+    port: 80
+    name: http
+    targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: commande
   namespace: default
   annotations:
@@ -41,84 +80,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: produits
-  namespace: default
-  annotations:
-           prometheus.io/scrape: 'true'
-           filter.by.port.name: 'true'
-spec:
-  selector:
-    matchLabels:
-      app: produits
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: produits
-    spec:
-      containers:
-      - name: produits
-        image: switch2mdock/micro-app:produits
-        ports:
-        - containerPort: 9001
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: produits
-spec:
-  type: LoadBalancer
-  selector:
-    app: produits
-  ports:
-  - protocol: TCP
-    port: 80
-    name: http
-    targetPort: 9001
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: clientui
-  namespace: default 
-  annotations:
-           prometheus.io/scrape: 'true'
-           filter.by.port.name: 'true'
-spec:
-  selector:
-    matchLabels:
-      app: clientui
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: clientui
-    spec:
-      containers:
-      - name: clientui
-        image: switch2mdock/micro-app:client
-        ports:
-        - containerPort: 8080
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: clientui
-spec:
-  type: LoadBalancer
-  selector:
-    app: clientui
-  ports:
-  - protocol: TCP
-    port: 80
-    name: http
-    targetPort: 8080
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: paiement
   namespace: default
   annotations:
@@ -139,7 +100,6 @@ spec:
         image: switch2mdock/micro-app:paiement
         ports:
         - containerPort: 9003
-
 ---
 apiVersion: v1
 kind: Service
@@ -154,4 +114,43 @@ spec:
     port: 80
     name: http
     targetPort: 9003
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: produit
+  namespace: default
+  annotations:
+    prometheus.io/scrape: 'true'
+    filter.by.port.name: 'true'
+spec:
+  selector:
+    matchLabels:
+      app: produit
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: produit
+    spec:
+      containers:
+      - name: produit
+        image: switch2mdock/micro-app:produits
+        ports:
+        - containerPort: 9001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: produit
+spec:
+  type: LoadBalancer
+  selector:
+    app: produit
+  ports:
+  - protocol: TCP
+    port: 80
+    name: http
+    targetPort: 9001
 
