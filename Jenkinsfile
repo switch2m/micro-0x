@@ -12,20 +12,31 @@ pipeline {
                 '''
             }
         }
-        stage('exexuting SCA test') {
-            //checking third party library used in the code that whether
-            //have vulnerability and check for deprecated dependencies
+        stage('SAST Stage') {
             steps {
-                echo 'Software Composition Analysis test'
-                sh '''
-                    cd microservice-produits
-                    rm owsap* || true
-                    wget "https://raw.githubusercontent.com/switch2m/micro-0x/master/owsap-sca.sh"
-                    chmod +x owsap-sca.sh
-                    bash owsap-sca.sh
-                '''
+                echo 'SAST test using Sonarqube'
+                witchSonarQubeEnv('sonar') {
+                    sh '''
+                        cd clientui
+                        mvn sonar:sonar
+                    '''
+                }
             }
         }
+        // stage('exexuting SCA test') {
+        //     //checking third party library used in the code that whether
+        //     //have vulnerability and check for deprecated dependencies
+        //     steps {
+        //         echo 'Software Composition Analysis test'
+        //         sh '''
+        //             cd microservice-produits
+        //             rm owsap* || true
+        //             wget "https://raw.githubusercontent.com/switch2m/micro-0x/master/owsap-sca.sh"
+        //             chmod +x owsap-sca.sh
+        //             bash owsap-sca.sh
+        //         '''
+        //     }
+        // }
         // stage('build jar files for all microservices') {
         //     steps {
         //         echo 'mvn package for microservice-produits'
