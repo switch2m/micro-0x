@@ -12,6 +12,19 @@ pipeline {
                 '''
             }
         }
+        stage('exexuting SCA test') {
+            //checking third party library used in the code that whether
+            //have vulnerability and check for deprecated dependencies
+            steps {
+                echo 'Software Composition Analysis test'
+                sh '''
+                    cd microservice-produits
+                    rm owsap*
+                    wget ""
+                    bash 
+                '''
+            }
+        }
         stage('build jar files for all microservices') {
             steps {
                 echo 'mvn package for microservice-produits'
@@ -36,6 +49,7 @@ pipeline {
                 '''
             }
         }
+        
         stage('buid and push docker images') {
             steps {
                 echo 'build and push docker images'
