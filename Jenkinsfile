@@ -13,11 +13,31 @@ pipeline {
             }
         }
         stage('SAST Stage') {
+        //we run the sonarqube in a docker container using this command
+        //docker run -d -p 9000:9000 sonarqube
+        //then we install sonar scanner plugin in jenkins
+        //after that we configure(in configure system) sonarqube server by
+        //specifying the server url and a name and a user token(which we generate in the sonarqube server under the account/security setting section) this user token should added as a credentials with a type of secret text
             steps {
                 echo 'SAST test using Sonarqube'
                 withSonarQubeEnv('sonar') {
                     sh '''
                         cd clientui
+                        mvn sonar:sonar
+                        cat target/sonar/report-task.txt
+                    '''
+                    sh '''
+                        cd microservice-paiement
+                        mvn sonar:sonar
+                        cat target/sonar/report-task.txt
+                    '''
+                    sh '''
+                        cd microservice-commandes
+                        mvn sonar:sonar
+                        cat target/sonar/report-task.txt
+                    '''
+                    sh '''
+                        cd microservice-produits
                         mvn sonar:sonar
                         cat target/sonar/report-task.txt
                     '''
