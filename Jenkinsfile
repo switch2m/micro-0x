@@ -12,39 +12,46 @@ pipeline {
                 '''
             }
         }
-        stage('SAST Stage') {
-        //we run the sonarqube in a docker container using this command
-        //docker run -d -p 9000:9000 sonarqube
-        //then we install sonar scanner plugin in jenkins
-        //after that we configure(in configure system) sonarqube server by
-        //specifying the server url and a name and a user token(which we generate in the sonarqube server under the account/security setting section) this user token should added as a credentials with a type of secret text
-        //and finaly goto global tool configuration and configure sonarqube scanner by just adding the name of the sonarqube server
+        stage('Test with trufflehog') {
             steps {
-                echo 'SAST test using Sonarqube'
-                withSonarQubeEnv('sonar') {
-                    sh '''
-                        cd clientui
-                        mvn sonar:sonar
-                        cat target/sonar/report-task.txt
-                    '''
-                    sh '''
-                        cd microservice-paiement
-                        mvn sonar:sonar
-                        cat target/sonar/report-task.txt
-                    '''
-                    sh '''
-                        cd microservice-commandes
-                        mvn sonar:sonar
-                        cat target/sonar/report-task.txt
-                    '''
-                    sh '''
-                        cd microservice-produits
-                        mvn sonar:sonar
-                        cat target/sonar/report-task.txt
-                    '''
-                }
+                echo 'testing for exposed token, secret, keys, hardcoded password'
+                sh 'rm trufflehog || true'
+                sh 'docker run -d --json dxa4481/trufflehog https://github.com/switch2m/micro-0x.git > trufflehog'
             }
         }
+        // stage('SAST Stage') {
+        // we run the sonarqube in a docker container using this command
+        // docker run -d -p 9000:9000 sonarqube
+        // then we install sonar scanner plugin in jenkins
+        // after that we configure(in configure system) sonarqube server by
+        // specifying the server url and a name and a user token(which we generate in the sonarqube server under the account/security setting section) this user token should added as a credentials with a type of secret text
+        // and finaly goto global tool configuration and configure sonarqube scanner by just adding the name of the sonarqube server
+        //     steps {
+        //         echo 'SAST test using Sonarqube'
+        //         withSonarQubeEnv('sonar') {
+        //             sh '''
+        //                 cd clientui
+        //                 mvn sonar:sonar
+        //                 cat target/sonar/report-task.txt
+        //             '''
+        //             sh '''
+        //                 cd microservice-paiement
+        //                 mvn sonar:sonar
+        //                 cat target/sonar/report-task.txt
+        //             '''
+        //             sh '''
+        //                 cd microservice-commandes
+        //                 mvn sonar:sonar
+        //                 cat target/sonar/report-task.txt
+        //             '''
+        //             sh '''
+        //                 cd microservice-produits
+        //                 mvn sonar:sonar
+        //                 cat target/sonar/report-task.txt
+        //             '''
+        //         }
+        //     }
+        // }
         // stage('exexuting SCA test') {
         //     //checking third party library used in the code that whether
         //     //have vulnerability and check for deprecated dependencies
