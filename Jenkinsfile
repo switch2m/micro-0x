@@ -15,10 +15,11 @@ pipeline {
         stage('SAST Stage') {
             steps {
                 echo 'SAST test using Sonarqube'
-                witchSonarQubeEnv('sonar') {
+                withSonarQubeEnv('sonar') {
                     sh '''
                         cd clientui
                         mvn sonar:sonar
+                        cat target/sonar/report-task.txt
                     '''
                 }
             }
