@@ -16,7 +16,7 @@ if [ ! -d "$CACHE_DIRECTORY" ]; then
 fi
 
 # Make sure we are using the latest version
-docker pull owasp/dependency-check:$DC_VERSION
+#docker pull owasp/dependency-check:$DC_VERSION
 
 docker run --rm \
     -e user=$USER \
