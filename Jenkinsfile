@@ -17,6 +17,7 @@ pipeline {
                 echo 'testing for exposed token, secret, keys, hardcoded password'
                 sh 'rm trufflehog || true'
                 sh 'docker run -d --json dxa4481/trufflehog https://github.com/switch2m/micro-0x.git > trufflehog'
+                sh 'cat trufflehog'
             }
         }
         // stage('SAST Stage') {
