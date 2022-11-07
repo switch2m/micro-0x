@@ -12,13 +12,14 @@ pipeline {
                 '''
             }
         }
-        stage('Test with trufflehog') {
-            steps {
-                echo 'testing for exposed token, secret, keys, hardcoded password'
-                sh 'rm trufflehog || true'
-                sh 'docker run dxa4481/trufflehog  https://github.com/switch2m/micro-0x.git'
-            }
-        }
+        // stage('Test with trufflehog') {
+        //     steps {
+        //         echo 'testing for exposed token, secret, keys, hardcoded password'
+        //         sh 'rm trufflehog || true'
+        //         sh 'docker run dxa4481/trufflehog  https://github.com/switch2m/micro-0x.git'
+        //     }
+        // }
+        
         // stage('SAST Stage') {
         // we run the sonarqube in a docker container using this command
         // docker run -d -p 9000:9000 sonarqube
@@ -118,23 +119,31 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Create AKS kubenetes cluster') {
+        stage('Create AKS kubenetes cluster') {
+            steps {
+                echo 'creating AKS'
+                sh 'terraform init'
+                sh 'terraform apply --auto-approve'
+                echo 'connecting to the cluster'
+                sh 'az account set --subscription 7fd37297-df8e-43f0-8679-865285ff7951'
+                sh 'az aks get-credentials --resource-group rg-aks --name stage-aks-cluster'
+            }
+        }
+        stage('deployment with kubernetes') {
+            steps {
+                echo 'testing kubernetes cluster connection'
+                sh 'kubectl get node'
+                echo 'running kubectl commands'
+                sh 'kubectl delete all --all'
+                sh 'kubectl apply -f deployement.yaml'
+            }
+        }
+        // stage('DAST test on application') {
         //     steps {
-        //         echo 'creating AKS'
-        //         sh 'terraform init'
-        //         sh 'terraform apply --auto-approve'
-        //         echo 'connecting to the cluster'
-        //         sh 'az account set --subscription 7fd37297-df8e-43f0-8679-865285ff7951'
-        //         sh 'az aks get-credentials --resource-group rg-aks --name stage-aks-cluster'
-        //     }
-        // }
-        // stage('deployment with kubernetes') {
-        //     steps {
-        //         echo 'testing kubernetes cluster connection'
-        //         sh 'kubectl get node'
-        //         echo 'running kubectl commands'
-        //         sh 'kubectl delete all --all'
-        //         sh 'kubectl apply -f deployement.yaml'
+        //         echo 'testing application using owasp zap'
+        //         sshagent(['owasp']) {
+        //             sh 'ssh —o StrictHostKeyChecking=no azureuser@20.231.14.24 "docker run -t owasp/zap2docker-stable -t http://" '
+        //         }
         //     }
         // }
     }

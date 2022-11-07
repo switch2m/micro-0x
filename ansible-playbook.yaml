@@ -67,7 +67,7 @@
       meta: reset_connection
 
 
-- name: Test docker pull
+- name: Test docker ps
   hosts: localhost
   become: yes
   become_user: new-user
