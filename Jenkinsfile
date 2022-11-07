@@ -142,7 +142,7 @@ pipeline {
             steps {
                 echo 'testing application using owasp zap'
                 sshagent(['owasp']) {
-                    sh 'ssh —o StrictHostKeyChecking=no azureuser@20.231.14.24 "docker run -t owasp/zap2docker-stable -t http://20.187.161.229/" '
+                    sh 'ssh —o StrictHostKeyChecking=no -i awasp.pem azureuser@20.231.14.24 "docker run -t owasp/zap2docker-stable -t http://20.187.161.229/" '
                 }
             }
         }
