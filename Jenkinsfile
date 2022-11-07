@@ -119,32 +119,32 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Create AKS kubenetes cluster') {
-            steps {
-                echo 'creating AKS'
-                sh 'terraform init'
-                sh 'terraform apply --auto-approve'
-                echo 'connecting to the cluster'
-                sh 'az account set --subscription 7fd37297-df8e-43f0-8679-865285ff7951'
-                sh 'az aks get-credentials --resource-group rg-aks --name stage-aks-cluster'
-            }
-        }
-        stage('deployment with kubernetes') {
-            steps {
-                echo 'testing kubernetes cluster connection'
-                sh 'kubectl get node'
-                echo 'running kubectl commands'
-                sh 'kubectl delete all --all'
-                sh 'kubectl apply -f deployement.yaml'
-            }
-        }
-        // stage('DAST test on application') {
+        // stage('Create AKS kubenetes cluster') {
         //     steps {
-        //         echo 'testing application using owasp zap'
-        //         sshagent(['owasp']) {
-        //             sh 'ssh —o StrictHostKeyChecking=no azureuser@20.231.14.24 "docker run -t owasp/zap2docker-stable -t http://" '
-        //         }
+        //         echo 'creating AKS'
+        //         sh 'terraform init'
+        //         sh 'terraform apply --auto-approve'
+        //         echo 'connecting to the cluster'
+        //         sh 'az account set --subscription 7fd37297-df8e-43f0-8679-865285ff7951'
+        //         sh 'az aks get-credentials --resource-group rg-aks --name stage-aks-cluster'
         //     }
         // }
+        // stage('deployment with kubernetes') {
+        //     steps {
+        //         echo 'testing kubernetes cluster connection'
+        //         sh 'kubectl get node'
+        //         echo 'running kubectl commands'
+        //         sh 'kubectl delete all --all'
+        //         sh 'kubectl apply -f deployement.yaml'
+        //     }
+        // }
+        stage('DAST test on application') {
+            steps {
+                echo 'testing application using owasp zap'
+                sshagent(['owasp']) {
+                    sh 'ssh —o StrictHostKeyChecking=no azureuser@20.231.14.24 "docker run -t owasp/zap2docker-stable -t http://20.187.161.229/" '
+                }
+            }
+        }
     }
 }
