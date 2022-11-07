@@ -141,7 +141,7 @@ pipeline {
         stage('DAST test on application') {
             steps {
                 echo 'testing application using owasp zap'
-                sh 'ssh -i awasp.pem azureuser@20.231.14.24 —o StrictHostKeyChecking=no "docker run -t owasp/zap2docker-stable -t http://20.187.161.229/" '
+                sh 'ssh -i awasp.pem —o StrictHostKeyChecking=no azureuser@20.231.14.24 "docker run -t owasp/zap2docker-stable -t http://20.187.161.229/" '
             }
         }
     }
