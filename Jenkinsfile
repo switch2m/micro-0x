@@ -53,20 +53,20 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('exexuting SCA test') {
-        //     //checking third party library used in the code that whether
-        //     //have vulnerability and check for deprecated dependencies
-        //     steps {
-        //         echo 'Software Composition Analysis test'
-        //         sh '''
-        //             cd microservice-produits
-        //             rm owsap* || true
-        //             wget "https://raw.githubusercontent.com/switch2m/micro-0x/master/owsap-sca.sh"
-        //             chmod +x owsap-sca.sh
-        //             bash owsap-sca.sh
-        //         '''
-        //     }
-        // }
+        stage('exexuting SCA test') {
+            //checking third party library used in the code that whether
+            //have vulnerability and check for deprecated dependencies
+            steps {
+                dependencyCheck additionalArguments: 
+                '''
+                    scan="/var/jenkins_home/workspace/mine/clientui" 
+                    --format HTML
+                    --format XML  
+                ''', odcInstallation: 'sca'
+
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+             }
+        }
         // stage('build jar files for all microservices') {
         //     steps {
         //         echo 'mvn package for microservice-produits'
