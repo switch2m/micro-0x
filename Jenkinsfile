@@ -26,7 +26,7 @@ pipeline {
         // then we install sonar scanner plugin in jenkins
         // after that we configure(in configure system) sonarqube server by
         // specifying the server url and a name and a user token(which we generate in the sonarqube server under the account/security setting section) this user token should added as a credentials with a type of secret text
-        // and finaly goto global tool configuration and configure sonarqube scanner by just adding the name of the sonarqube server
+        // and finaly goto global tool configuration and configure sonarqube scanner by just adding the name of the sonarqube server and marking the box enabling adding sonar to env variables
         //     steps {
         //         echo 'SAST test using Sonarqube'
         //         withSonarQubeEnv('sonar') {
@@ -56,6 +56,7 @@ pipeline {
         stage('exexuting SCA test') {
             //checking third party library used in the code that whether
             //have vulnerability and check for deprecated dependencies
+            // use this http://jenkins-ip:8080/pipeline-syntax/ to generate pipeline script of plugins
             steps {
                 dependencyCheck additionalArguments: 
                 '''
