@@ -138,13 +138,13 @@ pipeline {
         //         sh 'kubectl apply -f deployement.yaml'
         //     }
         // }
-        stage('DAST test on application') {
-            steps {
-                echo 'testing application using owasp zap'
-                sshagent(['owasp']) {
-                    sh 'ssh —o StrictHostKeyChecking=no "docker run -t owasp/zap2docker-stable \zap-baseline.py -t http://20.187.161.229/"'
-                }
-            }
-        }
+        // stage('DAST test on application') {
+        //     steps {
+        //         echo 'testing application using owasp zap'
+        //         sshagent(['owasp']) {
+        //             sh 'ssh —o StrictHostKeyChecking=no "docker run -t owasp/zap2docker-stable \ zap-baseline.py -t http://20.187.161.229/"'
+        //         }
+        //     }
+        // }
     }
 }
