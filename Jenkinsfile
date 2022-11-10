@@ -1,5 +1,11 @@
 pipeline {
     agent any
+    // for the installation of brew in jenkins docker conatainer us have first to install it the root user in the docekr container using the following commanf
+    // /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    // after that changing the owner ship of the binary file of home brew to the jenkins user using this command
+    // chown -R jenkins:jenkins /home/linuxbrew/.linuxbrew/bin
+    // after that going to the jenkins user and adding the homebrew binary path to the PATH jenkins env variables using the following command
+    // export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
     stages {
         stage('Test environnement stage') {
             steps {
@@ -9,16 +15,17 @@ pipeline {
                     mvn -version
                     kubectl version --client
                     az --version
+                    brew --version
                 '''
             }
         }
-        stage('Test with trufflehog') {
-            steps {
-                echo 'testing for exposed token, secret, keys, hardcoded password'
-                sh 'rm trufflehog || true'
-                sh 'docker run dxa4481/trufflehog  https://github.com/switch2m/micro-0x.git || true'
-            }
-        }
+        // stage('Test with trufflehog') {
+        //     steps {
+        //         echo 'testing for exposed token, secret, keys, hardcoded password'
+        //         sh 'rm trufflehog || true'
+        //         sh 'docker run dxa4481/trufflehog  https://github.com/switch2m/micro-0x.git || true'
+        //     }
+        // }
         
         // stage('SAST Stage') {
         // we run the sonarqube in a docker container using this command
@@ -68,58 +75,58 @@ pipeline {
         //         dependencyCheckPublisher pattern: 'dependency-check-report.xml'
         //      }
         // }
-        stage('build jar files for all microservices') {
-            steps {
-                echo 'mvn package for microservice-produits'
-                sh '''
-                    cd microservice-produits
-                    mvn clean package
-                '''
-                echo 'mvn package for microservice-paiement'
-                sh '''
-                    cd microservice-paiement
-                    mvn clean package
-                '''
-                echo 'mvn package for microservice-commandes'
-                sh '''
-                    cd microservice-commandes
-                    mvn clean package
-                '''
-                echo 'mvn package for clientui'
-                sh '''
-                    cd clientui
-                    mvn clean package
-                '''
-            }
-        }
+        // stage('build jar files for all microservices') {
+        //     steps {
+        //         echo 'mvn package for microservice-produits'
+        //         sh '''
+        //             cd microservice-produits
+        //             mvn clean package
+        //         '''
+        //         echo 'mvn package for microservice-paiement'
+        //         sh '''
+        //             cd microservice-paiement
+        //             mvn clean package
+        //         '''
+        //         echo 'mvn package for microservice-commandes'
+        //         sh '''
+        //             cd microservice-commandes
+        //             mvn clean package
+        //         '''
+        //         echo 'mvn package for clientui'
+        //         sh '''
+        //             cd clientui
+        //             mvn clean package
+        //         '''
+        //     }
+        // }
         
-        stage('buid and push docker images') {
-            steps {
-                echo 'build and push docker images'
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh '''
-                        cd microservice-produits
-                        docker build -t switch2mdock/micro-app:produits .
-                        docker push switch2mdock/micro-app:produits
-                    '''
-                    sh '''
-                        cd microservice-paiement
-                        docker build -t switch2mdock/micro-app:paiement .
-                        docker push switch2mdock/micro-app:paiement
-                    '''
-                    sh '''
-                        cd microservice-commandes
-                        docker build -t switch2mdock/micro-app:commandes .
-                        docker push switch2mdock/micro-app:commandes
-                    '''
-                    sh '''
-                        cd clientui
-                        docker build -t switch2mdock/micro-app:cilent .
-                        docker push switch2mdock/micro-app:cilent
-                    '''
-                }
-            }
-        }
+        // stage('buid and push docker images') {
+        //     steps {
+        //         echo 'build and push docker images'
+        //         withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+        //             sh '''
+        //                 cd microservice-produits
+        //                 docker build -t switch2mdock/micro-app:produits .
+        //                 docker push switch2mdock/micro-app:produits
+        //             '''
+        //             sh '''
+        //                 cd microservice-paiement
+        //                 docker build -t switch2mdock/micro-app:paiement .
+        //                 docker push switch2mdock/micro-app:paiement
+        //             '''
+        //             sh '''
+        //                 cd microservice-commandes
+        //                 docker build -t switch2mdock/micro-app:commandes .
+        //                 docker push switch2mdock/micro-app:commandes
+        //             '''
+        //             sh '''
+        //                 cd clientui
+        //                 docker build -t switch2mdock/micro-app:cilent .
+        //                 docker push switch2mdock/micro-app:cilent
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Create AKS kubenetes cluster') {
             steps {
                 echo 'creating AKS'
@@ -134,6 +141,8 @@ pipeline {
             steps {
                 echo 'testing kubernetes cluster connection'
                 sh 'kubectl get node'
+                echo 'setting up  promotheus commands'
+                sh ''
                 echo 'running kubectl commands'
                 sh 'kubectl delete all --all'
                 sh 'kubectl apply -f deployement.yaml'
