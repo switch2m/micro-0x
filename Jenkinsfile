@@ -149,6 +149,7 @@ pipeline {
                     helm install stable prometheus-community/kube-prometheus-stack -n prometheus
                 '''
                 //sh 'kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus'//edit the type of the service to loadbalancer
+                // or u can use this command directly kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec": {"type": "LoadBalancer"}}'
                 //sh 'kubectl edit svc stable-grafana -n prometheus' //edit the type of the service to loadbalancer
                 echo 'running kubectl commands'
                 sh 'kubectl delete all --all'
