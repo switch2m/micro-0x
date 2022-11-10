@@ -16,6 +16,7 @@ pipeline {
                     kubectl version --client
                     az --version
                     brew --version
+                    brew install helm
                 '''
             }
         }
@@ -142,7 +143,13 @@ pipeline {
                 echo 'testing kubernetes cluster connection'
                 sh 'kubectl get node'
                 echo 'setting up  promotheus commands'
-                sh ''
+                sh '''
+                    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                    kubectl create namespace prometheus
+                    helm install stable prometheus-community/kube-prometheus-stack -n prometheus
+                '''
+                //sh 'kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus'//edit the type of the service to loadbalancer
+                //sh 'kubectl edit svc stable-grafana -n prometheus' //edit the type of the service to loadbalancer
                 echo 'running kubectl commands'
                 sh 'kubectl delete all --all'
                 sh 'kubectl apply -f deployement.yaml'
