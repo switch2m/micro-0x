@@ -9,6 +9,33 @@ NOTE: This is not recommended in production environments. Only use in a lab or d
 to login to the ui we should get the password using the following command
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 after that we should create a webhoook in the code source repo referencing the ip of the argoCD http://argocd_ip/api/webhook if we add the secret we should also add it in the config files of argocd
+this is the argoCD application configurations file in which we specify the code repo which we want argoCD to connect and the target cluster and namespace where to apply those changes
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/argoproj/argocd-example-apps.git
+    targetRevision: HEAD
+    path: guestbook
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: guestbook
+
+  syncPolicy:
+    syncOptions:
+      - createNamespace=true
+  
+  automated:
+    selfHeal: true
+    prune: true
+
+
+
+
 
 K8s NOTE:
 to have prometheus scrape the custom metrics exposed by pods at :80/data/metrics, add these annotations to the pods deployment configurations:
