@@ -1,0 +1,7 @@
+appName: clientui
+appImage: switch2mdock/micro-app:cilent
+replicaCount: 1
+containerPort: 8080
+
+serviceType: LoadBalancer
+servicePort: 80

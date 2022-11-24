@@ -1,0 +1,8 @@
+appName: servicename
+appImage: gcr.io/google-samples/microservices-demo/servicename
+replicaCount: 1
+containerPort: 8080
+
+serviceType: ClusterIP
+servicePort: 8080
+http: http

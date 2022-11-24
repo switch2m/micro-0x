@@ -1,0 +1,7 @@
+appName: paiement
+appImage: switch2mdock/micro-app:paiement
+replicaCount: 1
+containerPort: 9003
+
+serviceType: ClusterIP
+servicePort: 80

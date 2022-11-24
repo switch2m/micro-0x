@@ -1,0 +1,7 @@
+appName: produit
+appImage: switch2mdock/micro-app:produits
+replicaCount: 1
+containerPort: 9001
+
+serviceType: ClusterIP
+servicePort: 80

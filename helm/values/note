@@ -1,0 +1,4 @@
+if u are using helm to deploy a microservice application in CI/CD pipeline tool and u want to ensure continuous deployment and make sure that the latest image that was pushed to a docker registry it's the one that have been utilized u should just create charts that helm will utilize to deploy the microservice app with latest image and for that u should run the following command
+helm install --set appImage=switch2mdock/<app-name>:<latest-tag> values\clientui-svc.yaml charts\microservice\
+values\clientui-svc.yaml = the values to apply
+charts\microservice\ = the charts where the values should be applied

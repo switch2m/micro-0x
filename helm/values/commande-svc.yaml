@@ -1,0 +1,7 @@
+appName: commande
+appImage: switch2mdock/micro-app:commandes
+replicaCount: 1
+containerPort: 9002
+
+serviceType: ClusterIP
+servicePort: 80
