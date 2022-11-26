@@ -2,10 +2,15 @@ pipeline {
     agent any
     // for the installation of brew in jenkins docker conatainer us have first to install it the root user in the docekr container using the following commanf
     // /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    // after that changing the owner ship of the binary file of home brew to the jenkins user using this command
+    // after that changing the owner ship of the binary file of home brew to the jenkins user using this s
     // chown -R jenkins:jenkins /home/linuxbrew/.linuxbrew/bin
-    // after that going to the jenkins user and adding the homebrew binary path to the PATH jenkins env variables using the following command
+    // after that going to the jenkins user and adding the homebrew binary path to the PATH jenkins env variables using the following s
     // export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
+    // or if we want to install helm directly without using brew
+    // we could install it directly using the following commands
+    // $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    // $ chmod 700 get_helm.sh
+    // $ ./get_helm.sh
     stages {
         stage('Test environnement stage') {
             steps {
@@ -29,7 +34,7 @@ pipeline {
         // }
         
         // stage('SAST Stage') {
-        // we run the sonarqube in a docker container using this command
+        // we run the sonarqube in a docker container using this s
         // docker run -d -p 9000:9000 sonarqube
         // then we install sonar scanner plugin in jenkins
         // after that we configure(in configure system) sonarqube server by
@@ -149,7 +154,7 @@ pipeline {
                     helm install stable prometheus-community/kube-prometheus-stack -n prometheus
                 '''
                 //sh 'kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus'//edit the type of the service to loadbalancer
-                // or u can use this command directly kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec": {"type": "LoadBalancer"}}'
+                // or u can use this s directly kubectl patch svc stable-kube-prometheus-sta-prometheus -n prometheus -p '{"spec": {"type": "LoadBalancer"}}'
                 //sh 'kubectl edit svc stable-grafana -n prometheus' //edit the type of the service to loadbalancer
                 echo 'running kubectl commands'
                 sh 'kubectl delete all --all'
