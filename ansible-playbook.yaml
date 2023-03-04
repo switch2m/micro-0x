@@ -90,3 +90,18 @@
         cmd: docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker jenkins/jenkins:lts
       register: dockjen
     - debug: msg={{dockjen}}
+   
+   
+- name: install helm
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: install helm
+      command: "{{ item }}"
+      with_items:
+      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+      - chmod 700 get_helm.sh
+      - ./get_helm.sh
+      - helm version
+      register: helmv
+    - debug: msg={{helmv}}
