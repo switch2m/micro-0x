@@ -20,18 +20,16 @@ spec:
   source:
     repoURL: https://github.com/argoproj/argocd-example-apps.git
     targetRevision: HEAD
-    path: guestbook
+    path: /
   destination:
     server: https://kubernetes.default.svc
-    namespace: guestbook
-
+    namespace: default
   syncPolicy:
     syncOptions:
       - createNamespace=true
-  
-  automated:
-    selfHeal: true
-    prune: true
+    automated:
+      selfHeal: true
+      prune: true
 
 
 
