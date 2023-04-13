@@ -67,7 +67,7 @@ kind: Service
 metadata:
   name: commande
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: commande
   ports:
@@ -106,7 +106,7 @@ kind: Service
 metadata:
   name: paiement
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: paiement
   ports:
@@ -145,7 +145,7 @@ kind: Service
 metadata:
   name: produit
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: produit
   ports:
