@@ -105,3 +105,28 @@
       - helm version
       register: helmv
     - debug: msg={{helmv}}
+
+- name: install kubectl
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install apt-transport-https
+      apt:
+        name: apt-transport-https
+        state: present
+
+    - name: Add Kubernetes GPG key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Add Kubernetes repository
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes.list
+
+    - name: Install kubectl
+      apt:
+        name: kubectl
+        state: present
