@@ -80,6 +80,7 @@ steps:
     repositoryName: 'switch2m/micro-0x'
     action: 'edit'
     target: '$(Build.SourceVersion)'
+    tag: 'add tfvars file'
     assets: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
