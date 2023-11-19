@@ -80,9 +80,8 @@ steps:
   inputs:
     gitHubConnection: 'github.com_switch2m'
     repositoryName: '$(Build.Repository.Name)'
-    action: 'create'
+    action: 'edit'
     target: '$(Build.SourceVersion)'
-    tagSource: 'userSpecifiedTag'
     tag: '$(myTagName)'
     releaseNotesFilePath: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
     assets: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
