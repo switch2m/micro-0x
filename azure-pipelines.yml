@@ -86,4 +86,5 @@ steps:
     assets: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
-    
+    releaseNotesFilePath: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
+    releaseNotesSource: 'filePath'
