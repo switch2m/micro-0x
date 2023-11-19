@@ -80,7 +80,7 @@ steps:
   inputs:
     gitHubConnection: 'github.com_switch2m'
     repositoryName: '$(Build.Repository.Name)'
-    action: 'edit'
+    action: 'create'
     target: '$(Build.SourceVersion)'
     tag: 'new update on variabless'
     assets: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
