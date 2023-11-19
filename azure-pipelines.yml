@@ -74,14 +74,17 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/vars'
     ArtifactName: 'vars'
     publishLocation: 'Container'
+  
+
 - task: GitHubRelease@1
   inputs:
     gitHubConnection: 'github.com_switch2m'
-    repositoryName: 'switch2m/micro-0x'
-    action: 'edit'
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
     target: '$(Build.SourceVersion)'
-    tag: 'add tfvars file'
+    tagSource: 'gitTag'
+    tagPattern: 'update'
     assets: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
-
+    
