@@ -63,15 +63,24 @@ steps:
     echo "hub_gpvnet_name = \"${{ parameters.hub_gpvnet_name }}\"" >> vars.tfvars
     echo "tf_var_filename = \"${{ parameters.tf_var_filename }}\"" >> vars.tfvars
   displayName: 'Generate .tfvars File'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'vars.tfvars'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/vars'
 
-- script: |
-    git config --global user.email "you@example.com"
-    git config --global user.name "Your Name"
-    git init
-    git add vars.tfvars
-    git commit -m "Add generated .tfvars file"
-    git remote add origin https://<repository-url>.git
-    git push origin master
-  displayName: 'Push to Repository'
-  env:
-    GIT_TERMINAL_PROMPT: '0'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/vars'
+    ArtifactName: 'vars'
+    publishLocation: 'Container'
+- task: GitHubRelease@1
+  inputs:
+    gitHubConnection: 'github.com_switch2m'
+    repositoryName: 'switch2m/micro-0x'
+    action: 'edit'
+    target: '$(Build.SourceVersion)'
+    assets: '$(Build.ArtifactStagingDirectory)/vars/vars.tfvars'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
+
