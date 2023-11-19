@@ -1,0 +1,77 @@
+trigger:
+- none
+
+parameters:
+- name: spoke_rg_name
+  type: string
+  default: 'AZRG-AME-USE2-CCMS-NET_TEST-POC-02'
+- name: spoke_vnet_name
+  type: string
+  default: 'AZUSE2-CCMS-POC-VNET-02'
+- name: hub_rg_name
+  type: string
+  default: 'AZRG-COM-EUS2-HUB-POC'
+- name: hub_vnet_name
+  type: string
+  default: 'AZCOMUSE2POCVNT01'
+- name: spoke_subid
+  type: string
+  default: 'd63fb67e-e5a3-42ae-a51a-8a3513a89863'
+- name: hub_subid
+  type: string
+  default: 'dd9c130e-df27-412c-baf0-06ec54eb56c1'
+- name: stgacc_rg_name
+  type: string
+  default: 'AZRG-AME-USE2-CCMS-STGACC-POC'
+- name: stgacc_name
+  type: string
+  default: 'azstgacctfstate'
+- name: ctr_name
+  type: string
+  default: 'tfstatefilepoc'
+- name: ctr_key
+  type: string
+  default: 'terraformpeering.tfstate'
+- name: hub_gpvnet_rg_name
+  type: string
+  default: 'AZRG-COM-EUS2-HUB-GP-POC'
+- name: hub_gpvnet_name
+  type: string
+  default: 'AZCOMUSE2GPPOCVNT01'
+- name: tf_var_filename
+  type: string
+  default: 'sub_id'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- checkout: none
+
+- script: |
+    echo "spoke_rg_name = \"${{ parameters.spoke_rg_name }}\"" > vars.tfvars
+    echo "spoke_vnet_name = \"${{ parameters.spoke_vnet_name }}\"" >> vars.tfvars
+    echo "hub_rg_name = \"${{ parameters.hub_rg_name }}\"" >> vars.tfvars
+    echo "hub_vnet_name = \"${{ parameters.hub_vnet_name }}\"" >> vars.tfvars
+    echo "spoke_subid = \"${{ parameters.spoke_subid }}\"" >> vars.tfvars
+    echo "hub_subid = \"${{ parameters.hub_subid }}\"" >> vars.tfvars
+    echo "stgacc_rg_name = \"${{ parameters.stgacc_rg_name }}\"" >> vars.tfvars
+    echo "stgacc_name = \"${{ parameters.stgacc_name }}\"" >> vars.tfvars
+    echo "ctr_name = \"${{ parameters.ctr_name }}\"" >> vars.tfvars
+    echo "ctr_key = \"${{ parameters.ctr_key }}\"" >> vars.tfvars
+    echo "hub_gpvnet_rg_name = \"${{ parameters.hub_gpvnet_rg_name }}\"" >> vars.tfvars
+    echo "hub_gpvnet_name = \"${{ parameters.hub_gpvnet_name }}\"" >> vars.tfvars
+    echo "tf_var_filename = \"${{ parameters.tf_var_filename }}\"" >> vars.tfvars
+  displayName: 'Generate .tfvars File'
+
+- script: |
+    git config --global user.email "you@example.com"
+    git config --global user.name "Your Name"
+    git init
+    git add vars.tfvars
+    git commit -m "Add generated .tfvars file"
+    git remote add origin https://<repository-url>.git
+    git push origin master
+  displayName: 'Push to Repository'
+  env:
+    GIT_TERMINAL_PROMPT: '0'
